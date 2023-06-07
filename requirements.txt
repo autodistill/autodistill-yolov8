@@ -1,0 +1,2 @@
+autodistill
+ultralytics==8.0.81
