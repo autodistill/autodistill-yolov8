@@ -66,7 +66,7 @@ project.version(DATASET_VERSION).deploy(model_type="yolov8", model_path=f"./runs
 ## Quickstart (Use a YOLOv8 Model to Label Data)
 
 ```python
-from autodistill_yolov8.yolov8 import YOLOv8Base
+from autodistill_yolov8 import YOLOv8Base
 from autodistill.detection import CaptionOntology
 
 # define an ontology to map class names to our YOLOv8 classes
