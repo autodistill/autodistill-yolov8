@@ -11,9 +11,9 @@
 
 # Autodistill: YOLOv8 Target Model
 
-This repository contains the code implementing [YOLOv8](https://github.com/ultralytics/ultralytics) as a Target Model for use with [`autodistill`](https://github.com/autodistill/autodistill).
+This repository contains the code implementing [YOLOv8](https://github.com/ultralytics/ultralytics) as a Target Model for use with [`autodistill`](https://github.com/autodistill/autodistill). You can also use a YOLOv8 model as a base model to auto-label data. 
 
-YOLOv8 is a convolutional neural network that supports realtime object detection, instance segmentation, and other tasks. It can be deployed to a variety of edge devices.
+YOLOv8 is a Convolutional Neural Network (CNN) that supports realtime object detection, instance segmentation, and other tasks. It can be deployed to a variety of edge devices.
 
 Read the full [Autodistill documentation](https://autodistill.github.io/autodistill/).
 
@@ -29,7 +29,7 @@ pip3 install autodistill-grounded-sam autodistill-yolov8
 
 You can find a full list of `detection` Base Models on [the main autodistill repo](https://github.com/autodistill/autodistill).
 
-## Quickstart
+## Quickstart (Train a YOLOv8 Model)
 
 ```python
 from autodistill_grounded_sam import GroundedSAM
@@ -61,6 +61,30 @@ from roboflow import Roboflow
 rf = Roboflow(api_key="API_KEY")
 project = rf.workspace().project("PROJECT_ID")
 project.version(DATASET_VERSION).deploy(model_type="yolov8", model_path=f"./runs/detect/train/")
+```
+
+## Quickstart (Use a YOLOv8 Model to Label Data)
+
+```python
+from autodistill_yolov8.yolov8 import YOLOv8Base
+from autodistill.detection import CaptionOntology
+
+# define an ontology to map class names to our YOLOv8 classes
+# the ontology dictionary has the format {caption: class}
+# where caption is the prompt sent to the base model, and class is the label that will
+# be saved for that caption in the generated annotations
+# then, load the model
+
+# replace weights_path with the path to your YOLOv8 weights file
+base_model = YOLOv8Base(ontology=CaptionOntology({"car": "car"}), weights_path="yolov5s.pt")
+
+# run inference on a single image
+results = base_model.predict("mercedes.jpeg")
+
+base_model.label(
+  input_folder="./images",
+  output_folder="./dataset"
+)
 ```
 
 ## Choosing a Task
